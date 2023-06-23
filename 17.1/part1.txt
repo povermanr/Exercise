@@ -1,0 +1,24 @@
+1. What is HTTP?
+    Hypertext Transfer Protocal is a protocal thats governs how clients send/receive data to a server
+2. What is a URL?
+    Uniform Resource Locator; the address used to locate a resource on the internet
+3. What is DNS?
+    Domain Name System; a system that takes human-readable url's and translates them into an IP address
+4. What is a query string?
+    A part of a URL that is used to pass additional information to a web server. It appears after the path and is preceded by a question mark (?). The query string consists of one or more key-value pairs separated by ampersands (&)
+5. What are two HTTP verbs and how are they different?
+    GET - retreives data from a server
+    POST - submits data to a server
+6. What is an HTTP request?
+    a request from a client to a server that follows the HTTP protocal; requests HTML
+7. What is an HTTP response?
+    a response from a server to a client that follows the HTTP protocal; sends HTML/JS/CSS
+8. What is an HTTP header? Give a couple examples of request and response headers you have seen.
+    part on an HTTP request that provides additional information about the message/resource
+        Request headers: user-agent, content-type, cookie
+        Response headers: content-type, set-cookie, last-modified
+9. What are the processes that happen when you type “http://somesite.com/some/page.html” into a browser?
+    - browser resolves the domain name into an IP address
+    - browsers makes HTTP request to the IP adress and includes things like headers, browser info, cookies, etc
+    - browser receives HTTP responce and renders the received content into a webpage using HTML, JS, stylessheets,  images and any other resources needed
+    - browser makes individual requests for each resource and receives the responces from the server
