@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+  </style>
+  <title>Giphy Party!</title>
+</head>
+<body>
+  <div class="container">
+    <h1>GIPHY PARTY</h1>
+    <form>
+      <input type="text" id="search" name="search" placeholder="Enter Search Term">
+      <input type="submit" class="submit-btn" value="Search Giphy!">
+      <button id="remove" class="danger-btn">Remove Images</button>
+    </form>
+    <div id="gif-area" class="row"></div>
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="app.js"></script>
+</body>
+
+</html>

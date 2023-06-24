@@ -1,0 +1,49 @@
+body {
+    background-color: #c3cde6;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 4rem;
+    font-family: 'Caprasimo', cursive;
+    color: #3C3219;
+}
+
+.container {
+    text-align: center;
+}
+
+form {
+    margin-top: 20px;
+}
+
+.w-100{
+    margin: 10px !important;
+}
+  
+#search {
+    background-color: transparent;
+    border-style: none none dashed;
+}
+
+input[type='text'] {
+    font-size: 1.5rem;
+    color: #3C3219;
+}
+
+.submit-btn, .danger-btn {
+  background-color: #f0e3ce;
+  color: #233045;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.submit-btn:hover, .danger-btn:hover {
+    background-color: #233045;
+    color: #f0e3ce;
+  }
