@@ -1,38 +1,35 @@
 "use strict";
 
+$(document).ready(function () {
+  $(document).on('click', '.episodes-button', async function () {
+    const showId = $(this).data('show-id');
+    const episodes = await getEpisodesOfShow(showId);
+    populateEpisodes(episodes);
+  });
+});
+
 const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 
 
-/** Given a search term, search for tv shows that match that query.
- *
- *  Returns (promise) array of show objects: [show, show, ...].
- *    Each show object should contain exactly: {id, name, summary, image}
- *    (if no image URL given by API, put in a default image URL)
- */
+function searchTVShows(searchTerm) {
+  const apiUrl = `http://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`;
 
-async function getShowsByTerm( /* term */) {
-  // ADD: Remove placeholder & make request to TVMaze search shows API.
+  return axios.get(apiUrl)
+    .then(response => {
+      return response.data.map(item => {
+        const { id, name, summary } = item.show;
+        const image = item.show.image ? item.show.image.medium : 'https://tinyurl.com/tv-missing';
 
-  return [
-    {
-      id: 1767,
-      name: "The Bletchley Circle",
-      summary:
-        `<p><b>The Bletchley Circle</b> follows the journey of four ordinary
-           women with extraordinary skills that helped to end World War II.</p>
-         <p>Set in 1952, Susan, Millie, Lucy and Jean have returned to their
-           normal lives, modestly setting aside the part they played in
-           producing crucial intelligence, which helped the Allies to victory
-           and shortened the war. When Susan discovers a hidden code behind an
-           unsolved murder she is met by skepticism from the police. She
-           quickly realises she can only begin to crack the murders and bring
-           the culprit to justice with her former friends.</p>`,
-      image:
-        "http://static.tvmaze.com/uploads/images/medium_portrait/147/369403.jpg"
-    }
-  ];
+        return { id, name, summary, image };
+      });
+    });
+}
+
+async function getShowsByTerm(term) {
+  const shows = await searchTVShows(term);
+  return shows;
 }
 
 function populateShows(shows) {
@@ -41,17 +38,15 @@ function populateShows(shows) {
   for (let show of shows) {
     const $show = $(
       `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
-         <div class="media">
+          <div class="media custom-media-class">
            <img
-              src="http://static.tvmaze.com/uploads/images/medium_portrait/160/401704.jpg"
-              alt="Bletchly Circle San Francisco"
+              src="${show.image}"
+              alt="${show.name}"
               class="w-25 me-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
              <div><small>${show.summary}</small></div>
-             <button class="btn btn-outline-light btn-sm Show-getEpisodes">
-               Episodes
-             </button>
+             <button class="btn btn-outline-light btn-sm episodes-button">Episodes</button>
            </div>
          </div>
        </div>
@@ -84,8 +79,31 @@ $searchForm.on("submit", async function (evt) {
  *      { id, name, season, number }
  */
 
-// async function getEpisodesOfShow(id) { }
+async function getEpisodesOfShow(id) {
+  const apiUrl = `http://api.tvmaze.com/shows/${id}/episodes`;
+
+  return axios.get(apiUrl)
+  .then(response => {
+    return response.data.map(episode => {
+      const { id, name, season, number } = episode;
+      return { id, name, season, number };
+    });
+  });
+
+}
 
 /** Write a clear docstring for this function... */
 
-// function populateEpisodes(episodes) { }
+function populateEpisodes(episodes) {
+  const episodesList = $('#episodes-list');
+  episodesList.empty();
+
+  episodes.forEach(episode => {
+    const { id, name, season, number } = episode;
+    const episodeItem = $('<li>').text(`${name} (season ${season}, number ${number})`);
+    episodeItem.attrd('data-episode-id', id);
+    episodesList.append(episodeItem);
+  });
+
+  $episodesArea.show();
+}
