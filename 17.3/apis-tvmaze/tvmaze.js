@@ -1,7 +1,7 @@
 "use strict";
 
 $(document).ready(function () {
-  $(document).on('click', '.episodes-button', async function () {
+  $(document).on('click', '.Show-getEpisodes', async function () {
     const showId = $(this).data('show-id');
     const episodes = await getEpisodesOfShow(showId);
     populateEpisodes(episodes);
@@ -12,6 +12,12 @@ const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 
+/** Given a search term, search for tv shows that match that query.
+ *
+ *  Returns (promise) array of show objects: [show, show, ...].
+ *    Each show object should contain exactly: {id, name, summary, image}
+ *    (if no image URL given by API, put in a default image URL)
+ */
 
 function searchTVShows(searchTerm) {
   const apiUrl = `http://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`;
@@ -46,7 +52,7 @@ function populateShows(shows) {
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
              <div><small>${show.summary}</small></div>
-             <button class="btn btn-outline-light btn-sm episodes-button">Episodes</button>
+             <button class="btn btn-outline-light btn-sm Show-getEpisodes" data-show-id="${show.id}">Episodes</button>
            </div>
          </div>
        </div>
@@ -83,13 +89,14 @@ async function getEpisodesOfShow(id) {
   const apiUrl = `http://api.tvmaze.com/shows/${id}/episodes`;
 
   return axios.get(apiUrl)
-  .then(response => {
+    .then(response => {
+      // console.log('API response:', response);
+      // console.log('API response data:', response.data);
     return response.data.map(episode => {
       const { id, name, season, number } = episode;
       return { id, name, season, number };
     });
   });
-
 }
 
 /** Write a clear docstring for this function... */
@@ -101,9 +108,19 @@ function populateEpisodes(episodes) {
   episodes.forEach(episode => {
     const { id, name, season, number } = episode;
     const episodeItem = $('<li>').text(`${name} (season ${season}, number ${number})`);
-    episodeItem.attrd('data-episode-id', id);
+    episodeItem.attr('data-episode-id', id);
     episodesList.append(episodeItem);
   });
 
   $episodesArea.show();
 }
+
+/** Handle click on episodes button: get episodes for show and display */
+
+async function getEpisodesAndDisplay(evt) {
+  const showId = $(evt.target).closest(".Show").data("show-id");
+  const episodes = await getEpisodesOfShow(showId);
+  populateEpisodes(episodes);
+}
+
+$showsList.on("click", ".Show-getEpisodes", getEpisodesAndDisplay);
