@@ -38,7 +38,7 @@ $(document).ready(function () {
         var $newGif = $('<img>', { src: gif.images.fixed_height.url, class: 'w-100' });  
         
         $newCol.append($newGif);
-        $gifArea.append($newGif);
+        $gifArea.append($newCol);
     };
 
     $("#remove").on("click", function () {
